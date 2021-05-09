@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/model/student.dart';
@@ -16,6 +17,9 @@ class _FormScreenState extends State<FormScreen> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
 
   final requiredValidator = RequiredValidator(errorText: 'จำเป็นต้องระบุ');
+
+  CollectionReference studentCollection =
+      FirebaseFirestore.instance.collection("students");
 
   @override
   Widget build(BuildContext context) {
@@ -97,13 +101,21 @@ class _FormScreenState extends State<FormScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           child: Text("บันทึก"),
-                          onPressed: () {
+                          onPressed: () async {
                             if (formKey.currentState.validate()) {
                               formKey.currentState.save();
-                              print("${myStudent.firstName}");
-                              print("${myStudent.lastName}");
-                              print("${myStudent.email}");
-                              print("${myStudent.score}");
+                              // print("${myStudent.firstName}");
+                              // print("${myStudent.lastName}");
+                              // print("${myStudent.email}");
+                              // print("${myStudent.score}");
+                              await studentCollection.add({
+                                "firstname": myStudent.firstName,
+                                "lastname": myStudent.lastName,
+                                "email": myStudent.email,
+                                "score": myStudent.score
+                              });
+                              // Reset form each field to empty
+                              formKey.currentState.reset();
                             }
                           },
                         ),
