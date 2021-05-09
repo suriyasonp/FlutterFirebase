@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/model/student.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -6,6 +7,10 @@ class FormScreen extends StatefulWidget {
 }
 
 class _FormScreenState extends State<FormScreen> {
+  final formKey = GlobalKey<FormState>();
+
+  Students myStudent = Students();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +20,7 @@ class _FormScreenState extends State<FormScreen> {
       body: Container(
         padding: EdgeInsets.all(20),
         child: Form(
+          key: formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +29,11 @@ class _FormScreenState extends State<FormScreen> {
                   "ชื่อ",
                   style: TextStyle(fontSize: 20),
                 ),
-                TextFormField(),
+                TextFormField(
+                  onSaved: (String firstName) {
+                    myStudent.firstName = firstName;
+                  },
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -31,7 +41,11 @@ class _FormScreenState extends State<FormScreen> {
                   "สกุล",
                   style: TextStyle(fontSize: 16),
                 ),
-                TextFormField(),
+                TextFormField(
+                  onSaved: (String lastName) {
+                    myStudent.lastName = lastName;
+                  },
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -39,7 +53,11 @@ class _FormScreenState extends State<FormScreen> {
                   "อีเมล์",
                   style: TextStyle(fontSize: 16),
                 ),
-                TextFormField(),
+                TextFormField(
+                  onSaved: (String email) {
+                    myStudent.email = email;
+                  },
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -47,12 +65,22 @@ class _FormScreenState extends State<FormScreen> {
                   "คะแนน",
                   style: TextStyle(fontSize: 16),
                 ),
-                TextFormField(),
+                TextFormField(
+                  onSaved: (String score) {
+                    myStudent.score = score;
+                  },
+                ),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     child: Text("บันทึก"),
-                    onPressed: () {},
+                    onPressed: () {
+                      formKey.currentState.save();
+                      print("${myStudent.firstName}");
+                      print("${myStudent.lastName}");
+                      print("${myStudent.email}");
+                      print("${myStudent.score}");
+                    },
                   ),
                 )
               ],
