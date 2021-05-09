@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/model/student.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class _FormScreenState extends State<FormScreen> {
   final formKey = GlobalKey<FormState>();
 
   Students myStudent = Students();
+
+  final requiredValidator = RequiredValidator(errorText: 'จำเป็นต้องระบุ');
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,7 @@ class _FormScreenState extends State<FormScreen> {
                   style: TextStyle(fontSize: 20),
                 ),
                 TextFormField(
+                  validator: requiredValidator,
                   onSaved: (String firstName) {
                     myStudent.firstName = firstName;
                   },
@@ -54,6 +58,7 @@ class _FormScreenState extends State<FormScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 TextFormField(
+                  validator: EmailValidator(errorText: "กรุณาระบุอีเมล์"),
                   onSaved: (String email) {
                     myStudent.email = email;
                   },
@@ -66,6 +71,7 @@ class _FormScreenState extends State<FormScreen> {
                   style: TextStyle(fontSize: 16),
                 ),
                 TextFormField(
+                  validator: requiredValidator,
                   onSaved: (String score) {
                     myStudent.score = score;
                   },
@@ -75,11 +81,13 @@ class _FormScreenState extends State<FormScreen> {
                   child: ElevatedButton(
                     child: Text("บันทึก"),
                     onPressed: () {
-                      formKey.currentState.save();
-                      print("${myStudent.firstName}");
-                      print("${myStudent.lastName}");
-                      print("${myStudent.email}");
-                      print("${myStudent.score}");
+                      if (formKey.currentState.validate()) {
+                        formKey.currentState.save();
+                        print("${myStudent.firstName}");
+                        print("${myStudent.lastName}");
+                        print("${myStudent.email}");
+                        print("${myStudent.score}");
+                      }
                     },
                   ),
                 )
